@@ -1,0 +1,35 @@
+version: '3'
+services:
+  master:
+    image: mysql:8.0.34
+    container_name: mysql-master
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --lower-case-table-names=1
+      --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 33061:3306
+    volumes:
+      - ./master/data:/var/lib/mysql
+      - ./master/conf.d:/etc/mysql/conf.d
+      - ./master/log:/var/log/mysql
+  slave:
+    image: mysql:8.0.34
+    container_name: mysql-slave
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --lower-case-table-names=1
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 33062:3306
+    volumes:
+      - ./slave/data:/var/lib/mysql
+      - ./slave/conf.d:/etc/mysql/conf.d
+      - ./slave/log:/var/log/mysql
